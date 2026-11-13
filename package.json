@@ -1,0 +1,14 @@
+{
+  "name": "hyperpane-plugin-tunnels",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "description": "The Tunnels plugin's dev tools: the type checker and the types it checks against. Never served or uploaded; build.sh installs them, with the SDK.",
+  "devDependencies": {
+    "@types/node": "26.6.6",
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
+    "lucide-react": "1.66.0",
+    "typescript": "7.0.2"
+  }
+}

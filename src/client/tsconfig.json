@@ -1,0 +1,27 @@
+{
+  // The client part, checked as the app runs it in its frame: JSX with the
+  // automatic runtime, the SDK's modules as the app's import map names them.
+  "compilerOptions": {
+    "target": "ES2023",
+    "lib": ["ES2023", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "jsx": "react-jsx",
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "skipLibCheck": true,
+    "isolatedModules": true,
+    "erasableSyntaxOnly": true,
+    "verbatimModuleSyntax": true,
+    "allowImportingTsExtensions": true,
+    "noEmit": true,
+    "types": [],
+    "paths": {
+      "@hyperpane/ui": ["../../node_modules/@hyperpane/sdk/types/ui/index.d.ts"],
+      "@hyperpane/code": ["../../node_modules/@hyperpane/sdk/types/code/index.d.ts"],
+      "@hyperpane/markdown": ["../../node_modules/@hyperpane/sdk/types/markdown/index.d.ts"]
+    }
+  },
+  "include": [".", "../shared"]
+}

@@ -1,0 +1,31 @@
+{
+  "manifest": 1,
+  "id": "tunnels",
+  "name": "Tunnels",
+  "version": "0.0.1",
+  "publisher": "hyperpane",
+  "description": "Share a port of the server on the internet: HTTP, WebSocket and TCP tunnels through tunnl.gg, Pinggy, Cloudflare or bore. No account; tunnels keep running and reconnect.",
+  "icon": "icon.svg",
+  "category": "DevOps",
+  "engines": { "hyperpane": ">=0.2.0", "node": ">=22.15.0" },
+  "client": { "main": "main.tsx" },
+  "server": { "runtime": "node", "main": "main.ts" },
+  "contributes": {
+    "nodes": [
+      {
+        "kind": "tunnels",
+        "title": "Tunnels",
+        "icon": "icon.svg",
+        "size": [
+          460,
+          340
+        ]
+      }
+    ]
+  },
+  "signature": {
+    "key": "ed25519:5LgmP9NjLnpvz48igrFekSqi+4k6gzaO8sNwlsgNKFc=",
+    "sig": "F5qBqTUu1eNWmPRfI4+fcmoCc2av8IYJH8ZdtFUVbClKXWkYRk0zvBsxXeXZaszjQydP+YuX9AQ0LKMUpHnsDQ==",
+    "server": "sA0vJc/6ytYjBbJHSyVXxY9q6842qwcEgBBa3HWwdnfHSJy0j3hU7TCJExR2wgJoBl0AeFFBkJckz7JHGtMbCQ=="
+  }
+}
