@@ -1,0 +1,7 @@
+{
+  "accent": "#2bc3a6",
+  "tagline": "Share a port of your server on the internet, no account needed.",
+  "chips": ["HTTP", "WebSocket", "TCP", "Reconnects"],
+  "window": "Tunnels",
+  "illustration": "illustration.svg"
+}

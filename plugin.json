@@ -4,9 +4,11 @@
   "name": "Tunnels",
   "version": "0.0.1",
   "publisher": "hyperpane",
-  "description": "Share a port of the server on the internet: HTTP, WebSocket and TCP tunnels through tunnl.gg, Pinggy, Cloudflare or bore. No account; tunnels keep running and reconnect.",
+  "description": "Share a port of your server on the internet, no account needed: HTTP and WebSocket or TCP tunnels through tunnl.gg, Pinggy, Cloudflare or bore, kept running and reconnecting.",
   "icon": "icon.svg",
   "category": "DevOps",
+  "homepage": "https://github.com/hyperpane/hp-tunnels",
+  "license": "MIT",
   "engines": { "hyperpane": ">=0.2.0", "node": ">=22.15.0" },
   "client": { "main": "main.tsx" },
   "server": { "runtime": "node", "main": "main.ts" },
@@ -25,7 +27,7 @@
   },
   "signature": {
     "key": "ed25519:5LgmP9NjLnpvz48igrFekSqi+4k6gzaO8sNwlsgNKFc=",
-    "sig": "F5qBqTUu1eNWmPRfI4+fcmoCc2av8IYJH8ZdtFUVbClKXWkYRk0zvBsxXeXZaszjQydP+YuX9AQ0LKMUpHnsDQ==",
-    "server": "sA0vJc/6ytYjBbJHSyVXxY9q6842qwcEgBBa3HWwdnfHSJy0j3hU7TCJExR2wgJoBl0AeFFBkJckz7JHGtMbCQ=="
+    "sig": "V0OQEIoUJKRdYB7TyBgwjUD1o6l8jT5j1I8n/0Cu+SBx6cQzE8Hlk5SqNUbRC2HPFWxkRYFZBW2rHq22s7DpDg==",
+    "server": "2w7PW3JNAd66KQLvxXLcFCFRyzRqp8bIQMmxViUZSB/xQorlmPw3Il9BRY5e44WboA2FoqGex7WAqeboEdj9Dg=="
   }
 }
