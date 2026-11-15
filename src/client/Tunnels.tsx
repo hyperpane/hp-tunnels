@@ -50,9 +50,9 @@ export function TunnelsView() {
     }
   }, [host, reply]);
 
-  if (!project) return <NodeMessage>Open a project to add tunnels to it.</NodeMessage>;
+  if (!project) return <NodeMessage>Open a project to add tunnels to it</NodeMessage>;
   if (error) return <NodeMessage error>{error}</NodeMessage>;
-  if (!reply) return <NodeMessage>Loading…</NodeMessage>;
+  if (!reply) return <NodeMessage>Loading</NodeMessage>;
 
   const call: Call = (req) => host.call(ID, { project: project.id, ...req }).catch((e: Error) => host.app.toast(e.message, { error: true }));
   const names = Object.fromEntries(reply.providers.map((p) => [p.id, p.name])) as Record<ProviderId, string>;

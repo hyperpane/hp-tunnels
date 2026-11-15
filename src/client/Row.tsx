@@ -17,8 +17,8 @@ const DOT: Record<Tunnel['status'], string> = {
 
 const SAID: Record<Tunnel['status'], string> = {
   live: 'Live',
-  connecting: 'Connecting…',
-  retrying: 'Reconnecting…',
+  connecting: 'Connecting',
+  retrying: 'Reconnecting',
   failed: 'Stopped',
   off: 'Off',
 };
@@ -40,7 +40,7 @@ export function Row({ t, service, call }: { t: Tunnel; service: string; call: Ca
           {t.type.toUpperCase()} · {service}
         </span>
         {t.listening === false && on && (
-          <span className="flex-none text-[var(--ansi-3)]" title={`Nothing answers at ${t.host}:${t.port} on the server yet: visitors get an error until your app runs.`}>
+          <span className="flex-none text-[var(--ansi-3)]" title={`Nothing answers at ${t.host}:${t.port} on the server yet: visitors get an error until your app runs`}>
             nothing listening
           </span>
         )}
@@ -52,7 +52,7 @@ export function Row({ t, service, call }: { t: Tunnel; service: string; call: Ca
           onClick={async () => {
             const ok = await host.ui.confirm({
               title: `Remove ${t.name || `the tunnel to port ${t.port}`}?`,
-              message: t.stable ? 'Its address goes with it: a new tunnel gets a new one.' : 'It stops, and its address stops working.',
+              message: t.stable ? 'Its address goes with it: a new tunnel gets a new one' : 'It stops, and its address stops working',
               confirm: 'Remove',
               destructive: true,
             });

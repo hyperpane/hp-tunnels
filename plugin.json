@@ -2,7 +2,7 @@
   "manifest": 1,
   "id": "tunnels",
   "name": "Tunnels",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "publisher": "hyperpane",
   "description": "Share a port of your server on the internet, no account needed: HTTP and WebSocket or TCP tunnels through tunnl.gg, Pinggy, Cloudflare or bore, kept running and reconnecting.",
   "icon": "icon.svg",
@@ -43,7 +43,7 @@
   },
   "signature": {
     "key": "ed25519:5LgmP9NjLnpvz48igrFekSqi+4k6gzaO8sNwlsgNKFc=",
-    "sig": "QWNbMAaO9iAEYbgK96VSv6fm0jMchRvxOfUFoO2Tu60ftqsFFPcMSM6F6bKibjnGLjpxCopi5a/tZhURUNF0DA==",
-    "server": "6mT3/9aTzvtOvApEkK3NHqm3+2uaVhdm/A525sa5GtPI85Ov7e7u+FPGOQ4pBfiSh2wovQViJrIIHtClW9zhDQ=="
+    "sig": "z6T6LUy+97Kb2fIMzRHZYFGFRNJ92tXBy5PPKsakIQSeDfxByARwwGLOkMvdscgJTauIHRXtrGJbxaqqzL1wBg==",
+    "server": "GuOhwzflgljM/Vv8O5j4UlHTxCw1PhEfeiiFeoP21a5Auhv+yoPSYTl83HDqWiw+REcIKWOYnmwM/tKAKB3WBw=="
   }
 }

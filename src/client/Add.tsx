@@ -50,7 +50,7 @@ export function Add({ providers, onAdd, empty }: { providers: ProviderInfo[]; on
             onValueChange={setType}
             items={TYPES.map((t) => {
               const none = !providers.some((p) => p.types.includes(t.id));
-              const title = none ? `${t.about} No free service without an account carries ${t.name} yet.` : t.about;
+              const title = none ? `${t.about} No free service without an account carries ${t.name} yet` : t.about;
               // A disabled tab takes no pointer, so its tooltip is on its
               // name, which does.
               return { value: t.id, label: none ? <span className="pointer-events-auto" title={title}>{t.name}</span> : t.name, title, disabled: none };
@@ -68,14 +68,14 @@ export function Add({ providers, onAdd, empty }: { providers: ProviderInfo[]; on
           <NodeInput
             className={cn('w-28', problem && 'border-[var(--ansi-1)]')}
             placeholder={type === 'tcp' ? 'Port (5432)' : 'Port (3000)'}
-            title={problem ?? 'The port to share: 3000, or host:3000 for another machine this server reaches.'}
+            title={problem ?? 'The port to share: 3000, or host:3000 for another machine this server reaches'}
             value={port}
             onChange={(e) => setPort(e.target.value.trim())}
             aria-label="Port"
           />
           <NodeInput className="min-w-20 flex-1" placeholder="Name (optional)" value={name} onChange={(e) => setName(e.target.value)} aria-label="Name" />
           {service?.stable && (
-            <Checkbox className="gap-1.5 text-xs text-[var(--node-muted)]" title="Keep the same address every time it connects." label="Same address" checked={stable} onCheckedChange={setStable} />
+            <Checkbox className="gap-1.5 text-xs text-[var(--node-muted)]" title="Keep the same address every time it connects" label="Same address" checked={stable} onCheckedChange={setStable} />
           )}
           <NodeButton type="submit" disabled={!service || !portPart || !!problem || busy}>
             <Plus />
@@ -85,7 +85,7 @@ export function Add({ providers, onAdd, empty }: { providers: ProviderInfo[]; on
       </form>
       {empty && service && (
         <div className="flex flex-col gap-1.5 p-3 text-[var(--node-muted)]">
-          <p className="text-[var(--node-fg)]">Share a port of this server on the internet.</p>
+          <p className="text-[var(--node-fg)]">Share a port of this server on the internet</p>
           <p>{TYPES.find((t) => t.id === type)?.about} Anyone with the address reaches the port.</p>
           <p>
             <span className="text-[var(--node-fg)]">{service.name}</span> goes out through {service.via} and needs {service.needs}.
