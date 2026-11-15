@@ -9,9 +9,17 @@
   "category": "DevOps",
   "homepage": "https://github.com/hyperpane/hp-tunnels",
   "license": "MIT",
-  "engines": { "hyperpane": ">=0.2.0", "node": ">=22.15.0" },
-  "client": { "main": "main.tsx" },
-  "server": { "runtime": "node", "main": "main.ts" },
+  "engines": {
+    "hyperpane": ">=0.2.2",
+    "node": ">=22.15.0"
+  },
+  "client": {
+    "main": "main.tsx"
+  },
+  "server": {
+    "runtime": "node",
+    "main": "main.ts"
+  },
   "contributes": {
     "nodes": [
       {
@@ -21,13 +29,21 @@
         "size": [
           460,
           340
+        ],
+        "ports": [
+          {
+            "id": "url",
+            "label": "Public URL",
+            "direction": "out",
+            "type": "text"
+          }
         ]
       }
     ]
   },
   "signature": {
     "key": "ed25519:5LgmP9NjLnpvz48igrFekSqi+4k6gzaO8sNwlsgNKFc=",
-    "sig": "V0OQEIoUJKRdYB7TyBgwjUD1o6l8jT5j1I8n/0Cu+SBx6cQzE8Hlk5SqNUbRC2HPFWxkRYFZBW2rHq22s7DpDg==",
-    "server": "2w7PW3JNAd66KQLvxXLcFCFRyzRqp8bIQMmxViUZSB/xQorlmPw3Il9BRY5e44WboA2FoqGex7WAqeboEdj9Dg=="
+    "sig": "HPHmQ1lzfjHeiirGw1WusirAGPDJN0pBCgrodQu/3vCwhZbOdWnLGagKUU9ItyjA2WYW6x1yK6OuUto62Nm3DA==",
+    "server": "6mT3/9aTzvtOvApEkK3NHqm3+2uaVhdm/A525sa5GtPI85Ov7e7u+FPGOQ4pBfiSh2wovQViJrIIHtClW9zhDQ=="
   }
 }

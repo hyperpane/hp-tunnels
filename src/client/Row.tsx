@@ -4,9 +4,8 @@
 
 import { Copy, ExternalLink, RotateCw, Trash2 } from 'lucide-react';
 import { formatAgo, useHost } from '@hyperpane/sdk/client';
-import { ToolButton, cn } from '@hyperpane/ui';
+import { Switch, ToolButton, cn } from '@hyperpane/ui';
 import { type Tunnel, shownAddress } from '../shared/index.ts';
-import { Switch } from './Switch.tsx';
 
 const DOT: Record<Tunnel['status'], string> = {
   live: 'bg-[var(--ansi-2)]',
@@ -60,7 +59,7 @@ export function Row({ t, service, call }: { t: Tunnel; service: string; call: Ca
             if (ok) void call({ op: 'remove', id: t.id });
           }}
         />
-        <Switch on={on} label={on ? 'Turn off' : 'Turn on'} onChange={(v) => void call({ op: 'set', id: t.id, on: v })} />
+        <Switch className="flex-none" checked={on} label={on ? 'Turn off' : 'Turn on'} hideLabel onCheckedChange={(v) => void call({ op: 'set', id: t.id, on: v })} />
       </div>
       {t.url && (
         <div className="flex items-center gap-1 pl-4">

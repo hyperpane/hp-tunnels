@@ -4,10 +4,9 @@
 
 import { useState } from 'react';
 import { Plus } from 'lucide-react';
-import { NodeButton, NodeInput, cn } from '@hyperpane/ui';
+import { Checkbox, NodeButton, NodeInput, NodeSelect, Tabs, cn } from '@hyperpane/ui';
 import { type ProviderId, type ProviderInfo, TYPES, type TunnelType, portProblem } from '../shared/index.ts';
 
-const field = 'rounded-control h-6 border border-[var(--node-border)] bg-transparent px-1.5 text-xs text-[var(--node-fg)] outline-none focus:border-[var(--node-accent)]';
 
 export function Add({ providers, onAdd, empty }: { providers: ProviderInfo[]; onAdd(req: Record<string, unknown>): Promise<unknown>; empty: boolean }) {
   const [type, setType] = useState<TunnelType>('http');
@@ -43,35 +42,27 @@ export function Add({ providers, onAdd, empty }: { providers: ProviderInfo[]; on
         }}
       >
         <div className="flex flex-wrap items-center gap-1.5">
-          <div className="rounded-control flex h-6 flex-none overflow-hidden border border-[var(--node-border)]" role="radiogroup" aria-label="What it carries">
-            {TYPES.map((t) => {
+          <Tabs
+            variant="pills"
+            label="What it carries"
+            className="h-6"
+            value={type}
+            onValueChange={setType}
+            items={TYPES.map((t) => {
               const none = !providers.some((p) => p.types.includes(t.id));
-              return (
-                <button
-                  key={t.id}
-                  type="button"
-                  role="radio"
-                  aria-checked={type === t.id}
-                  title={none ? `${t.about} No free service without an account carries ${t.name} yet.` : t.about}
-                  disabled={none}
-                  onClick={() => setType(t.id)}
-                  className={cn(
-                    'px-2 text-xs transition-colors duration-100 disabled:opacity-40',
-                    type === t.id ? 'bg-[color-mix(in_srgb,var(--node-accent)_22%,transparent)] text-[var(--node-fg)]' : 'text-[var(--node-muted)] hover:bg-[var(--node-hover)]',
-                  )}
-                >
-                  {t.name}
-                </button>
-              );
+              const title = none ? `${t.about} No free service without an account carries ${t.name} yet.` : t.about;
+              // A disabled tab takes no pointer, so its tooltip is on its
+              // name, which does.
+              return { value: t.id, label: none ? <span className="pointer-events-auto" title={title}>{t.name}</span> : t.name, title, disabled: none };
             })}
-          </div>
-          <select className={cn(field, 'min-w-0 flex-1')} value={service?.id ?? ''} onChange={(e) => setChosen(e.target.value as ProviderId)} aria-label="Service">
-            {carrying.map((p) => (
-              <option key={p.id} value={p.id}>
-                {p.name} · {p.via}
-              </option>
-            ))}
-          </select>
+          />
+          <NodeSelect
+            className="min-w-0 flex-1"
+            value={(service?.id ?? '') as ProviderId}
+            options={carrying.map((p) => ({ value: p.id, label: `${p.name} · ${p.via}` }))}
+            onChange={(id) => setChosen(id as ProviderId)}
+            aria-label="Service"
+          />
         </div>
         <div className="flex flex-wrap items-center gap-1.5">
           <NodeInput
@@ -84,10 +75,7 @@ export function Add({ providers, onAdd, empty }: { providers: ProviderInfo[]; on
           />
           <NodeInput className="min-w-20 flex-1" placeholder="Name (optional)" value={name} onChange={(e) => setName(e.target.value)} aria-label="Name" />
           {service?.stable && (
-            <label className="flex items-center gap-1 text-[var(--node-muted)]" title="Keep the same address every time it connects.">
-              <input type="checkbox" checked={stable} onChange={(e) => setStable(e.target.checked)} />
-              Same address
-            </label>
+            <Checkbox className="gap-1.5 text-xs text-[var(--node-muted)]" title="Keep the same address every time it connects." label="Same address" checked={stable} onCheckedChange={setStable} />
           )}
           <NodeButton type="submit" disabled={!service || !portPart || !!problem || busy}>
             <Plus />

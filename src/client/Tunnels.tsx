@@ -4,9 +4,12 @@
 // one: what it carries (HTTP, TCP, UDP), through which service, to which
 // port.
 //
+// Its output (linked in nodes mode): a tunnel's public address, once it's
+// live with one. Each address goes out once.
+//
 // The add row is Add.tsx, each tunnel a Row.tsx.
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useHost, useProject } from '@hyperpane/sdk/client';
 import { NodeMessage } from '@hyperpane/ui';
 import type { ProviderId, Tunnels as Reply } from '../shared/index.ts';
@@ -27,6 +30,25 @@ export function TunnelsView() {
     setError(null);
     return host.subscribe<Reply>(ID, { op: 'watch', project: project.id }, setReply, { onEnd: (e) => e && setError(e) });
   }, [project?.id, host]);
+
+  // The address each tunnel last sent, and the last one sent at all. A
+  // tunnel that comes up (or gets a new address) sends it; when several do
+  // in one update, the last of them goes.
+  const sent = useRef(new Map<string, string>());
+  const last = useRef<string | null>(null);
+  useEffect(() => {
+    if (!reply) return;
+    let next: string | null = null;
+    for (const t of reply.tunnels) {
+      if (t.status !== 'live' || !t.url || sent.current.get(t.id) === t.url) continue;
+      sent.current.set(t.id, t.url);
+      next = t.url;
+    }
+    if (next && next !== last.current) {
+      last.current = next;
+      host.ports.emit('url', next);
+    }
+  }, [host, reply]);
 
   if (!project) return <NodeMessage>Open a project to add tunnels to it.</NodeMessage>;
   if (error) return <NodeMessage error>{error}</NodeMessage>;
