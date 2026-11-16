@@ -65,7 +65,12 @@ export class Tunnels {
     this.#host = host;
     const settings = { ...o, backoff: o.backoff ?? [2, 5, 10, 30, 60], connectTimeout: o.connectTimeout ?? 30_000 };
     this.#store = new Store(host);
-    this.#runs = new Runs(host, settings, (id) => this.#specs.get(id), (project) => this.#changed(project));
+    this.#runs = new Runs(
+      host,
+      settings,
+      (id) => this.#specs.get(id),
+      (project) => this.#changed(project),
+    );
     this.#probing = new Probing(o.probeEvery ?? 5000, () => {
       for (const spec of this.#specs.values()) this.#probeOne(spec);
     });
@@ -132,7 +137,8 @@ export class Tunnels {
     if (n?.provider) {
       p = provider(n.provider);
       if (!p) throw new PluginError(`There's no tunnel service “${n.provider}”.`);
-      if (!p.info.types.includes(type)) throw new PluginError(`${p.info.name} doesn't carry ${type.toUpperCase()}: it carries ${p.info.types.map((x) => x.toUpperCase()).join(' and ')}.`);
+      if (!p.info.types.includes(type))
+        throw new PluginError(`${p.info.name} doesn't carry ${type.toUpperCase()}: it carries ${p.info.types.map((x) => x.toUpperCase()).join(' and ')}.`);
     } else {
       p = firstFor(type);
       if (!p) throw new PluginError(`No service here carries ${type.toUpperCase()} yet.`);
@@ -145,7 +151,9 @@ export class Tunnels {
       provider: p.info.id,
       host,
       port,
-      name: String(n?.name ?? '').trim().slice(0, 60),
+      name: String(n?.name ?? '')
+        .trim()
+        .slice(0, 60),
       stable: !!n?.stable && p.info.stable,
       on: true,
       created: Date.now(),
@@ -177,7 +185,9 @@ export class Tunnels {
 
   async rename(project: string, id: string, name: string): Promise<void> {
     const spec = this.#own(project, id);
-    spec.name = String(name ?? '').trim().slice(0, 60);
+    spec.name = String(name ?? '')
+      .trim()
+      .slice(0, 60);
     await this.#save();
     this.#changed(project);
   }

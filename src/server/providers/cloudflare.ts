@@ -12,7 +12,7 @@ import { runCommand } from './command.ts';
 import type { Provider } from './index.ts';
 import { bracketed } from './ssh.ts';
 
-export function cloudflareAddress(text: string): string | null {
+function cloudflareAddress(text: string): string | null {
   return /https:\/\/[a-z0-9-]+\.trycloudflare\.com(?![\w.-])/i.exec(text)?.[0].toLowerCase() ?? null;
 }
 

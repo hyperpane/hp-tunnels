@@ -6,7 +6,6 @@ import type { Context, Handlers, Session } from './index.ts';
 
 /** Text as a terminal shows it: no colors, no cursor moves. */
 export function plain(text: string): string {
-  // biome-ignore lint/suspicious/noControlCharactersInRegex: escape sequences
   return text.replace(/\x1b\[[0-9;?]*[ -/]*[@-~]|\x1b\][^\x07\x1b]*(\x07|\x1b\\)|\x1b[@-_]/g, '').replace(/\r/g, '');
 }
 
@@ -54,7 +53,10 @@ export function runCommand(
   child.on('error', (e: NodeJS.ErrnoException) => {
     if (done) return;
     done = true;
-    on.ended(e.code === 'ENOENT' ? `${run.name} isn't installed on this server (or isn't on its PATH).` : `${run.name} couldn't be started: ${e.message}`, true);
+    on.ended(
+      e.code === 'ENOENT' ? `${run.name} isn't installed on this server (or isn't on its PATH).` : `${run.name} couldn't be started: ${e.message}`,
+      true,
+    );
   });
   child.on('exit', (code, signal) => {
     if (done) return;

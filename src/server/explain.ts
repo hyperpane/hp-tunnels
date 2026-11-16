@@ -19,7 +19,8 @@ export function explain(said: string, p: ProviderInfo): string | null {
   const blocked = `something on the way (a VPN, a proxy or a firewall) may be blocking ${p.via}. Restart to try again, or try another service.`;
   if (/banner exchange/i.test(said)) return `${p.name} didn't answer: ${blocked}`;
   if (/timed out|didn't answer in time|went quiet/i.test(said)) return `${p.name} didn't answer in time: ${blocked}`;
-  if (/could not resolve hostname|nodename nor servname|name or service not known|ENOTFOUND|EAI_AGAIN/i.test(said)) return `${p.name} couldn't be found: is this server online? Restart to try again.`;
+  if (/could not resolve hostname|nodename nor servname|name or service not known|ENOTFOUND|EAI_AGAIN/i.test(said))
+    return `${p.name} couldn't be found: is this server online? Restart to try again.`;
   if (/connection refused|no route to host|network is unreachable|connection reset|ECONNREFUSED|EHOSTUNREACH|ENETUNREACH|ECONNRESET/i.test(said))
     return `Couldn't reach ${p.name} (${lastWords(said)}). Restart to try again, or try another service.`;
   if (/permission denied/i.test(said)) return `${p.name} turned the connection down (${lastWords(said)}).`;

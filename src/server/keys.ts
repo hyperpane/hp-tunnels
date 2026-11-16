@@ -20,7 +20,7 @@ function str(data: Buffer | string): Buffer {
 
 /** A new Ed25519 key: the private key file's text (`-----BEGIN OPENSSH
  * PRIVATE KEY-----`) and the public key's line (`ssh-ed25519 AAAA… comment`). */
-export function newKey(comment: string): { privateKey: string; publicKey: string } {
+function newKey(comment: string): { privateKey: string; publicKey: string } {
   const { publicKey, privateKey } = generateKeyPairSync('ed25519');
   const jwk = privateKey.export({ format: 'jwk' });
   const pk = Buffer.from(publicKey.export({ format: 'jwk' }).x!, 'base64url');
@@ -40,7 +40,7 @@ export function newKey(comment: string): { privateKey: string; publicKey: string
 }
 
 /** The keys' folder in the plugin's data folder. */
-export function keysDir(dataDir: string): string {
+function keysDir(dataDir: string): string {
   return path.join(dataDir, 'keys');
 }
 

@@ -103,7 +103,8 @@ export function portProblem(port: unknown): string | null {
  * nothing that could be read as a command's option. */
 export function hostProblem(host: unknown): string | null {
   if (typeof host !== 'string' || !host) return 'Say which host to forward to (localhost for this server).';
-  if (host.length > 253 || !/^[A-Za-z0-9]([A-Za-z0-9.-]*[A-Za-z0-9])?$|^\[?[0-9A-Fa-f:.]+\]?$/.test(host)) return `“${host}” isn't a host name or an IP address.`;
+  if (host.length > 253 || !/^[A-Za-z0-9]([A-Za-z0-9.-]*[A-Za-z0-9])?$|^\[?[0-9A-Fa-f:.]+\]?$/.test(host))
+    return `“${host}” isn't a host name or an IP address.`;
   return null;
 }
 

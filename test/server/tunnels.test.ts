@@ -52,7 +52,14 @@ async function made(mode: string, o: { dataDir?: string; cmd?: string; connectTi
       }
     },
     // Each run's arguments (without the program's name).
-    runs: () => (existsSync(log) ? readFileSync(log, 'utf8').trim().split('\n').filter(Boolean).map((l) => JSON.parse(l).slice(1)) : []),
+    runs: () =>
+      existsSync(log)
+        ? readFileSync(log, 'utf8')
+            .trim()
+            .split('\n')
+            .filter(Boolean)
+            .map((l) => JSON.parse(l).slice(1))
+        : [],
   };
   all.push(m);
   return m;
@@ -75,7 +82,8 @@ test('a tunnel goes live with the address ssh prints, through its own key and no
   const [args] = m.runs();
   const key = path.join(m.dataDir, 'keys', t.id);
   assert.deepEqual(args.slice(0, 5), ['-F', 'none', '-tt', '-i', key]);
-  for (const option of ['IdentitiesOnly=yes', 'IdentityAgent=none', 'ExitOnForwardFailure=yes', 'StrictHostKeyChecking=accept-new']) assert.ok(args.includes(option), option);
+  for (const option of ['IdentitiesOnly=yes', 'IdentityAgent=none', 'ExitOnForwardFailure=yes', 'StrictHostKeyChecking=accept-new'])
+    assert.ok(args.includes(option), option);
   assert.ok(args.includes(`UserKnownHostsFile=${path.join(m.dataDir, 'known_hosts')}`));
   assert.deepEqual(args.slice(-3), ['-R', '80:localhost:3000', 'stable@proxy.tunnl.gg']);
   assert.match(readFileSync(key, 'utf8'), /^-----BEGIN OPENSSH PRIVATE KEY-----\n/);
@@ -230,6 +238,9 @@ test('the address is found in what the service prints, and the last words are th
   const said = plain('\x1b[2J\x1b[1m  tunnl.gg\x1b[0m\r\n  █▀▀█\r\n  Your tunnel: \x1b[32mhttps://Happy-Tiger-a1b2c3d4.tunnl.gg\x1b[0m\r\n');
   assert.equal(tunnlAddress(said), 'https://happy-tiger-a1b2c3d4.tunnl.gg');
   assert.equal(tunnlAddress('https://evil.example/https://x.tunnl.gg.evil.example'), null);
-  assert.equal(lastWords('Warning: x\r\n  █▀▀█ \r\nssh: connect to host proxy.tunnl.gg port 22: Connection refused\r\n\r\n'), 'ssh: connect to host proxy.tunnl.gg port 22: Connection refused');
+  assert.equal(
+    lastWords('Warning: x\r\n  █▀▀█ \r\nssh: connect to host proxy.tunnl.gg port 22: Connection refused\r\n\r\n'),
+    'ssh: connect to host proxy.tunnl.gg port 22: Connection refused',
+  );
   assert.equal(lastWords('\n\n'), null);
 });

@@ -7,7 +7,6 @@ import { Plus } from 'lucide-react';
 import { Checkbox, NodeButton, NodeInput, NodeSelect, Tabs, cn } from '@hyperpane/ui';
 import { type ProviderId, type ProviderInfo, TYPES, type TunnelType, portProblem } from '../shared/index.ts';
 
-
 export function Add({ providers, onAdd, empty }: { providers: ProviderInfo[]; onAdd(req: Record<string, unknown>): Promise<unknown>; empty: boolean }) {
   const [type, setType] = useState<TunnelType>('http');
   const carrying = providers.filter((p) => p.types.includes(type));
@@ -53,7 +52,18 @@ export function Add({ providers, onAdd, empty }: { providers: ProviderInfo[]; on
               const title = none ? `${t.about} No free service without an account carries ${t.name} yet` : t.about;
               // A disabled tab takes no pointer, so its tooltip is on its
               // name, which does.
-              return { value: t.id, label: none ? <span className="pointer-events-auto" title={title}>{t.name}</span> : t.name, title, disabled: none };
+              return {
+                value: t.id,
+                label: none ? (
+                  <span className="pointer-events-auto" title={title}>
+                    {t.name}
+                  </span>
+                ) : (
+                  t.name
+                ),
+                title,
+                disabled: none,
+              };
             })}
           />
           <NodeSelect
@@ -75,7 +85,13 @@ export function Add({ providers, onAdd, empty }: { providers: ProviderInfo[]; on
           />
           <NodeInput className="min-w-20 flex-1" placeholder="Name (optional)" value={name} onChange={(e) => setName(e.target.value)} aria-label="Name" />
           {service?.stable && (
-            <Checkbox className="gap-1.5 text-xs text-[var(--node-muted)]" title="Keep the same address every time it connects" label="Same address" checked={stable} onCheckedChange={setStable} />
+            <Checkbox
+              className="gap-1.5 text-xs text-[var(--node-muted)]"
+              title="Keep the same address every time it connects"
+              label="Same address"
+              checked={stable}
+              onCheckedChange={setStable}
+            />
           )}
           <NodeButton type="submit" disabled={!service || !portPart || !!problem || busy}>
             <Plus />

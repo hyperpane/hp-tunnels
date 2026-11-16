@@ -5,7 +5,7 @@
 
 import { createHash } from 'node:crypto';
 import { existsSync } from 'node:fs';
-import { chmod, mkdir, rename, rm, writeFile } from 'node:fs/promises';
+import { chmod, mkdir, rename, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { gunzipSync } from 'node:zlib';
 
@@ -23,7 +23,7 @@ const FILES: Record<string, { file: string; sha256: string; tgz?: boolean }> = {
 const EXE = process.platform === 'win32' ? 'cloudflared.exe' : 'cloudflared';
 
 /** cloudflared on PATH, if it's there. */
-export function onPath(env: NodeJS.ProcessEnv = process.env): string | null {
+function onPath(env: NodeJS.ProcessEnv = process.env): string | null {
   for (const dir of (env.PATH ?? '').split(path.delimiter)) {
     if (!dir) continue;
     const file = path.join(dir, EXE);
@@ -54,7 +54,7 @@ export interface Download {
 }
 
 /** Node's fetch, with progress from Content-Length. */
-export const httpDownload: Download = {
+const httpDownload: Download = {
   async fetch(url, progress) {
     const res = await fetch(url, { redirect: 'follow' });
     if (!res.ok || !res.body) throw new Error(`${url} answered ${res.status}.`);
@@ -74,7 +74,10 @@ let pending: Promise<string> | null = null;
 
 /** cloudflared to run: on PATH, else the plugin's own copy (downloaded the
  * first time, once even when several tunnels ask together). */
-export function cloudflared(dataDir: string, o: { note(text: string | null): void; download?: Download; platform?: string; env?: NodeJS.ProcessEnv }): Promise<string> {
+export function cloudflared(
+  dataDir: string,
+  o: { note(text: string | null): void; download?: Download; platform?: string; env?: NodeJS.ProcessEnv },
+): Promise<string> {
   const found = onPath(o.env);
   if (found) return Promise.resolve(found);
   const dir = path.join(dataDir, 'bin', `cloudflared-${VERSION}`);
@@ -103,9 +106,3 @@ async function fetchIt(dir: string, file: string, o: { note(text: string | null)
   o.note(null);
   return file;
 }
-
-/** Forgets the downloaded copies (for the tests). */
-export async function forget(dataDir: string): Promise<void> {
-  await rm(path.join(dataDir, 'bin'), { recursive: true, force: true });
-}
-

@@ -40,7 +40,10 @@ export function Row({ t, service, call }: { t: Tunnel; service: string; call: Ca
           {t.type.toUpperCase()} · {service}
         </span>
         {t.listening === false && on && (
-          <span className="flex-none text-[var(--ansi-3)]" title={`Nothing answers at ${t.host}:${t.port} on the server yet: visitors get an error until your app runs`}>
+          <span
+            className="flex-none text-[var(--ansi-3)]"
+            title={`Nothing answers at ${t.host}:${t.port} on the server yet: visitors get an error until your app runs`}
+          >
             nothing listening
           </span>
         )}
@@ -59,7 +62,13 @@ export function Row({ t, service, call }: { t: Tunnel; service: string; call: Ca
             if (ok) void call({ op: 'remove', id: t.id });
           }}
         />
-        <Switch className="flex-none" checked={on} label={on ? 'Turn off' : 'Turn on'} hideLabel onCheckedChange={(v) => void call({ op: 'set', id: t.id, on: v })} />
+        <Switch
+          className="flex-none"
+          checked={on}
+          label={on ? 'Turn off' : 'Turn on'}
+          hideLabel
+          onCheckedChange={(v) => void call({ op: 'set', id: t.id, on: v })}
+        />
       </div>
       {t.url && (
         <div className="flex items-center gap-1 pl-4">
@@ -73,7 +82,10 @@ export function Row({ t, service, call }: { t: Tunnel; service: string; call: Ca
               {shownAddress(t.url)}
             </button>
           ) : (
-            <span className={cn('truncate font-mono select-text', t.status !== 'live' && 'opacity-50')} title={`Connect to this host and port (${t.type.toUpperCase()})`}>
+            <span
+              className={cn('truncate font-mono select-text', t.status !== 'live' && 'opacity-50')}
+              title={`Connect to this host and port (${t.type.toUpperCase()})`}
+            >
               {shownAddress(t.url)}
             </span>
           )}

@@ -40,7 +40,14 @@ async function made(mode: string, options: Options = {}) {
       await new Promise((r) => setTimeout(r, 25));
     }
   };
-  const runs = (): string[][] => (existsSync(log) ? readFileSync(log, 'utf8').trim().split('\n').filter(Boolean).map((l) => JSON.parse(l)) : []);
+  const runs = (): string[][] =>
+    existsSync(log)
+      ? readFileSync(log, 'utf8')
+          .trim()
+          .split('\n')
+          .filter(Boolean)
+          .map((l) => JSON.parse(l))
+      : [];
   return { plugin, dataDir, list, until, runs };
 }
 
@@ -84,7 +91,12 @@ test('Cloudflare: cloudflared over HTTP/2 (port 443), with a home of its own', a
 test('cloudflared that isn’t what Cloudflare published is never used', async () => {
   const dir = mkdtempSync(path.join(os.tmpdir(), 'cf-'));
   const notes: (string | null)[] = [];
-  const download = { fetch: async (_url: string, progress: (d: number) => void) => (progress(1), Buffer.from('not cloudflared')) };
+  const download = {
+    fetch: async (_url: string, progress: (d: number) => void) => {
+      progress(1);
+      return Buffer.from('not cloudflared');
+    },
+  };
   await assert.rejects(
     cloudflared(dir, { note: (n) => notes.push(n), download, platform: 'linux-x64', env: { PATH: '' } }),
     /isn't the one Cloudflare published/,

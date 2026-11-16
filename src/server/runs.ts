@@ -123,7 +123,22 @@ export class Runs {
     let run = this.#runs.get(spec.id);
     if (run?.session) return;
     if (!run) {
-      run = { session: null, serial: 0, status: 'off', url: null, error: null, note: null, since: Date.now(), attempt: 0, timer: null, deadline: null, out: '', liveAt: 0, active: false, wasLive: false };
+      run = {
+        session: null,
+        serial: 0,
+        status: 'off',
+        url: null,
+        error: null,
+        note: null,
+        since: Date.now(),
+        attempt: 0,
+        timer: null,
+        deadline: null,
+        out: '',
+        liveAt: 0,
+        active: false,
+        wasLive: false,
+      };
       this.#runs.set(spec.id, run);
     }
     if (run.timer) clearTimeout(run.timer);
@@ -220,7 +235,9 @@ export class Runs {
           if (r.status === 'live') return;
           r.deadline = setTimeout(() => {
             if (!current() || r.status === 'live') return;
-            this.#host.log(`${spec.id} (${spec.provider}): no address after ${this.#o.connectTimeout / 1000} s; it said: ${JSON.stringify(plain(r.out).slice(-600))}`);
+            this.#host.log(
+              `${spec.id} (${spec.provider}): no address after ${this.#o.connectTimeout / 1000} s; it said: ${JSON.stringify(plain(r.out).slice(-600))}`,
+            );
             wasTimedOut = true;
             session.stop();
             ended('timed out');
