@@ -101,7 +101,7 @@ test('cloudflared that isn’t what Cloudflare published is never used', async (
     cloudflared(dir, { note: (n) => notes.push(n), download, platform: 'linux-x64', env: { PATH: '' } }),
     /isn't the one Cloudflare published/,
   );
-  assert.ok(notes.includes('Downloading cloudflared… 100%'));
+  assert.ok(notes.includes('Downloading cloudflared 100%'));
   assert.equal(existsSync(path.join(dir, 'bin', `cloudflared-${VERSION}`, 'cloudflared')), false);
   await assert.rejects(cloudflared(dir, { note() {}, download, platform: 'plan9-mips', env: { PATH: '' } }), /no cloudflared download for plan9-mips/);
 });
