@@ -4,7 +4,7 @@
 
 import { Copy, ExternalLink, RotateCw, Trash2 } from 'lucide-react';
 import { formatAgo, useHost } from '@hyperpane/sdk/client';
-import { Switch, ToolButton, cn } from '@hyperpane/ui';
+import { Badge, Switch, ToolButton, cn } from '@hyperpane/ui';
 import { type Tunnel, shownAddress } from '../shared/index.ts';
 
 const DOT: Record<Tunnel['status'], string> = {
@@ -31,19 +31,19 @@ export function Row({ t, service, call }: { t: Tunnel; service: string; call: Ca
   const target = t.host === '127.0.0.1' || t.host === 'localhost' ? `:${t.port}` : `${t.host}:${t.port}`;
   const web = t.type === 'http';
   return (
-    <div className="group flex flex-col gap-1 border-b border-[var(--node-border)] py-2 last:border-b-0">
-      <div className="flex items-center gap-2">
+    <div className="group rounded-control flex flex-none flex-col gap-0.5 px-2 py-1.5 transition-colors duration-75 hover:bg-[var(--node-hover)]">
+      <div className="flex min-h-7 items-center gap-1">
         {/* What it is; a narrow window wraps it rather than squeeze its tools. */}
         <div className="flex min-w-0 flex-1 items-center gap-2 max-sm:flex-wrap max-sm:gap-y-0.5">
           <span className={cn('size-2 flex-none rounded-full', DOT[t.status])} title={SAID[t.status]} />
           <span className="truncate font-medium">{t.name || `Port ${t.port}`}</span>
-          <span className="flex-none text-[var(--node-muted)]">{target}</span>
-          <span className="rounded-control flex-none border border-[var(--node-border)] px-1 text-[10px] text-[var(--node-muted)]" title={`Through ${service}`}>
+          <span className="flex-none font-mono text-[var(--node-muted)] tabular-nums">{target}</span>
+          <Badge size="sm" shape="rounded" className="flex-none text-[var(--node-muted)]" title={`Through ${service}`}>
             {t.type.toUpperCase()} · {service}
-          </span>
+          </Badge>
           {t.listening === false && on && (
             <span
-              className="flex-none text-[var(--ansi-3)]"
+              className="text-2xs flex-none text-[var(--ansi-3)]"
               title={`Nothing answers at ${t.host}:${t.port} on the server yet: visitors get an error until your app runs`}
             >
               nothing listening
@@ -65,7 +65,7 @@ export function Row({ t, service, call }: { t: Tunnel; service: string; call: Ca
           }}
         />
         <Switch
-          className="flex-none"
+          className="ms-1 flex-none"
           checked={on}
           label={on ? 'Turn off' : 'Turn on'}
           hideLabel
@@ -73,11 +73,11 @@ export function Row({ t, service, call }: { t: Tunnel; service: string; call: Ca
         />
       </div>
       {t.url && (
-        <div className="flex items-center gap-1 pl-4">
+        <div className="flex min-w-0 items-center gap-1 pl-4">
           {web ? (
             <button
               type="button"
-              className={cn('truncate text-left text-[var(--node-accent)] hover:underline', t.status !== 'live' && 'opacity-50')}
+              className={cn('truncate text-left font-mono text-[var(--node-accent)] hover:underline', t.status !== 'live' && 'opacity-50')}
               title="Open in the browser"
               onClick={() => host.app.openExternal(t.url!)}
             >
@@ -95,7 +95,7 @@ export function Row({ t, service, call }: { t: Tunnel; service: string; call: Ca
           {web && <ToolButton label="Open in the browser" icon={ExternalLink} onClick={() => host.app.openExternal(t.url!)} />}
         </div>
       )}
-      <div className="pl-4 text-[var(--node-muted)]">
+      <div className="text-2xs pl-4 text-[var(--node-muted)]">
         {t.error ? (
           <span className={t.status === 'failed' ? 'text-[var(--ansi-1)]' : undefined}>{t.error}</span>
         ) : (
