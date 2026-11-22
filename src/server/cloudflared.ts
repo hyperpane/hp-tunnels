@@ -97,7 +97,8 @@ async function fetchIt(dir: string, file: string, o: { note(text: string | null)
   o.note('Downloading cloudflared');
   const bytes = await (o.download ?? httpDownload).fetch(url, (done) => o.note(`Downloading cloudflared ${Math.round(done * 100)}%`));
   const sha = createHash('sha256').update(bytes).digest('hex');
-  if (sha !== asset.sha256) throw new Error(`The cloudflared download isn't the one Cloudflare published (its SHA-256 is starting ${sha.slice(0, 12)}): not used`);
+  if (sha !== asset.sha256)
+    throw new Error(`The cloudflared download isn't the one Cloudflare published (its SHA-256 is starting ${sha.slice(0, 12)}): not used`);
   const exe = asset.tgz ? fromTgz(bytes, 'cloudflared') : bytes;
   await mkdir(dir, { recursive: true });
   await writeFile(`${file}.tmp`, exe, { mode: 0o755 });

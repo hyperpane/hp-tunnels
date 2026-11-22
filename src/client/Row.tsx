@@ -33,21 +33,23 @@ export function Row({ t, service, call }: { t: Tunnel; service: string; call: Ca
   return (
     <div className="group flex flex-col gap-1 border-b border-[var(--node-border)] py-2 last:border-b-0">
       <div className="flex items-center gap-2">
-        <span className={cn('size-2 flex-none rounded-full', DOT[t.status])} title={SAID[t.status]} />
-        <span className="truncate font-medium">{t.name || `Port ${t.port}`}</span>
-        <span className="flex-none text-[var(--node-muted)]">{target}</span>
-        <span className="rounded-control flex-none border border-[var(--node-border)] px-1 text-[10px] text-[var(--node-muted)]" title={`Through ${service}`}>
-          {t.type.toUpperCase()} · {service}
-        </span>
-        {t.listening === false && on && (
-          <span
-            className="flex-none text-[var(--ansi-3)]"
-            title={`Nothing answers at ${t.host}:${t.port} on the server yet: visitors get an error until your app runs`}
-          >
-            nothing listening
+        {/* What it is; a narrow window wraps it rather than squeeze its tools. */}
+        <div className="flex min-w-0 flex-1 items-center gap-2 max-sm:flex-wrap max-sm:gap-y-0.5">
+          <span className={cn('size-2 flex-none rounded-full', DOT[t.status])} title={SAID[t.status]} />
+          <span className="truncate font-medium">{t.name || `Port ${t.port}`}</span>
+          <span className="flex-none text-[var(--node-muted)]">{target}</span>
+          <span className="rounded-control flex-none border border-[var(--node-border)] px-1 text-[10px] text-[var(--node-muted)]" title={`Through ${service}`}>
+            {t.type.toUpperCase()} · {service}
           </span>
-        )}
-        <span className="flex-1" />
+          {t.listening === false && on && (
+            <span
+              className="flex-none text-[var(--ansi-3)]"
+              title={`Nothing answers at ${t.host}:${t.port} on the server yet: visitors get an error until your app runs`}
+            >
+              nothing listening
+            </span>
+          )}
+        </div>
         <ToolButton label="Restart" icon={RotateCw} disabled={!on} onClick={() => void call({ op: 'restart', id: t.id })} />
         <ToolButton
           label="Remove"
