@@ -2,7 +2,7 @@
   "manifest": 1,
   "id": "tunnels",
   "name": "Tunnels",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "publisher": "hyperpane",
   "description": "Share a port of your server on the internet, no account needed: HTTP and WebSocket or TCP tunnels through tunnl.gg, Pinggy, Cloudflare or bore, kept running and reconnecting.",
   "icon": "icon.svg",

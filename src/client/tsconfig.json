@@ -20,7 +20,8 @@
     "paths": {
       "@hyperpane/ui": ["../../node_modules/@hyperpane/sdk/types/ui/index.d.ts"],
       "@hyperpane/code": ["../../node_modules/@hyperpane/sdk/types/code/index.d.ts"],
-      "@hyperpane/markdown": ["../../node_modules/@hyperpane/sdk/types/markdown/index.d.ts"]
+      "@hyperpane/markdown": ["../../node_modules/@hyperpane/sdk/types/markdown/index.d.ts"],
+      "@hyperpane/icons": ["../../node_modules/@hyperpane/sdk/types/icons/index.d.ts"]
     }
   },
   "include": [".", "../shared"]

@@ -11,11 +11,12 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { useHost, useProject } from '@hyperpane/sdk/client';
-import { CircleAlert, FolderOpen } from 'lucide-react';
-import { Empty, Spinner } from '@hyperpane/ui';
+import { CircleAlert, FolderOpen } from '@hyperpane/icons';
+import { Empty, SectionHeader, Spinner } from '@hyperpane/ui';
 import type { ProviderId, Tunnels as Reply } from '../shared/index.ts';
 import { Add } from './Add.tsx';
 import { type Call, Row } from './Row.tsx';
+import { ACCENT } from './accent.ts';
 
 const ID = 'tunnels';
 
@@ -52,21 +53,21 @@ export function TunnelsView() {
   }, [host, reply]);
 
   if (!project)
-    return <Empty bordered={false} className="h-full" icon={<FolderOpen />} title="No project" description="Open a project to add tunnels to it." />;
+    return <Empty size="compact" className="h-full" icon={<FolderOpen />} title="No project" description="Open a project to add tunnels to it." />;
   if (error)
     return (
       <Empty
-        bordered={false}
+        size="compact"
         className="h-full"
-        icon={<CircleAlert className="text-[var(--ansi-1)]" />}
+        icon={<CircleAlert className="text-[var(--destructive-soft-foreground)]" />}
         title="Couldn’t load the tunnels"
         description={error}
       />
     );
   if (!reply)
     return (
-      <div className="flex h-full items-center justify-center gap-2 text-xs text-[var(--node-muted)]">
-        <Spinner size="xs" />
+      <div className="flex h-full items-center justify-center gap-2 text-[13px] text-[var(--node-muted)]">
+        <Spinner size="sm" />
         Loading
       </div>
     );
@@ -74,14 +75,22 @@ export function TunnelsView() {
   const call: Call = (req) => host.call(ID, { project: project.id, ...req }).catch((e: Error) => host.app.toast(e.message, { error: true }));
   const names = Object.fromEntries(reply.providers.map((p) => [p.id, p.name])) as Record<ProviderId, string>;
 
+  const live = reply.tunnels.filter((t) => t.status === 'live').length;
   return (
-    <div className="flex h-full flex-col text-xs text-[var(--node-fg)]">
+    <div className="flex h-full flex-col text-[13px] leading-5 text-[var(--node-fg)]" style={ACCENT}>
       <Add providers={reply.providers} onAdd={(req) => call({ op: 'add', ...req })} empty={reply.tunnels.length === 0} />
       {reply.tunnels.length > 0 && (
-        <div className="flex min-h-0 flex-1 flex-col gap-0.5 overflow-y-auto p-1">
-          {reply.tunnels.map((t) => (
-            <Row key={t.id} t={t} service={names[t.provider] ?? t.provider} call={call} />
-          ))}
+        <div className="flex min-h-0 flex-1 flex-col overflow-y-auto px-1.5 pt-2 pb-1.5">
+          <SectionHeader
+            label="Tunnels"
+            count={reply.tunnels.length}
+            actions={live > 0 ? <span className="text-xs text-[var(--green-soft-foreground)] tabular-nums">{live} live</span> : undefined}
+          />
+          <div className="flex flex-col gap-0.5">
+            {reply.tunnels.map((t) => (
+              <Row key={t.id} t={t} service={names[t.provider] ?? t.provider} call={call} />
+            ))}
+          </div>
         </div>
       )}
     </div>

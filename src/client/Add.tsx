@@ -1,11 +1,12 @@
-// The row to add a tunnel: what it carries (HTTP, TCP, UDP), through which
+// The card to add a tunnel: what it carries (HTTP, TCP, UDP), through which
 // service, to which port (or host:port), with an optional name; and, while
 // there are none yet, what the chosen service is and needs.
 
 import { useState } from 'react';
-import { Globe, Plus } from 'lucide-react';
-import { Checkbox, Empty, NodeButton, NodeInput, NodeSelect, Tabs, cn } from '@hyperpane/ui';
+import { Globe, Plus } from '@hyperpane/icons';
+import { Button, Checkbox, Empty, Input, SegmentedControl, Select, cn } from '@hyperpane/ui';
 import { type ProviderId, type ProviderInfo, TYPES, type TunnelType, portProblem } from '../shared/index.ts';
+
 
 export function Add({ providers, onAdd, empty }: { providers: ProviderInfo[]; onAdd(req: Record<string, unknown>): Promise<unknown>; empty: boolean }) {
   const [type, setType] = useState<TunnelType>('http');
@@ -33,109 +34,108 @@ export function Add({ providers, onAdd, empty }: { providers: ProviderInfo[]; on
 
   return (
     <>
-      <form
-        className="flex flex-none flex-col gap-3 border-b border-[var(--node-border)] p-3"
-        onSubmit={(e) => {
-          e.preventDefault();
-          void submit();
-        }}
-      >
-        <div className="flex flex-wrap items-end gap-x-2 gap-y-3">
-          <Field label="Carries">
-            <Tabs
-              variant="pills"
+      <div className="flex-none p-3 pb-1">
+        <form
+          className="rounded-card flex flex-col gap-2 bg-[var(--surface-raised)] p-2 shadow-[var(--highlight-top),var(--shadow-card)] ring-1 ring-[var(--hairline)] ring-inset"
+          onSubmit={(e) => {
+            e.preventDefault();
+            void submit();
+          }}
+        >
+          <div className="flex flex-wrap items-center gap-2">
+            <SegmentedControl
+              size="sm"
               label="What it carries"
               value={type}
-              onValueChange={setType}
-              items={TYPES.map((t) => {
+              onValueChange={(v) => setType(v as TunnelType)}
+              options={TYPES.map((t) => {
                 const none = !providers.some((p) => p.types.includes(t.id));
                 const title = none ? `${t.about} No free service without an account carries ${t.name} yet` : t.about;
-                // A disabled tab takes no pointer, so its tooltip is on its
-                // name, which does.
+                // A disabled option takes no pointer, so its tooltip is on
+                // its name, which does.
                 return {
                   value: t.id,
-                  label: none ? (
-                    <span className="pointer-events-auto" title={title}>
+                  label: (
+                    <span className="pointer-events-auto px-1" title={title}>
                       {t.name}
                     </span>
-                  ) : (
-                    t.name
                   ),
-                  title,
+                  srLabel: t.name,
                   disabled: none,
                 };
               })}
             />
-          </Field>
-          <Field label="Through" className="min-w-40 flex-1">
-            <NodeSelect
-              className="w-full"
-              value={(service?.id ?? '') as ProviderId}
+            <Select
+              size="sm"
+              variant="ghost"
+              className="min-w-40 flex-1"
+              triggerLabel="Service"
+              triggerClassName="[&_svg]:size-3.5"
+              value={service?.id ?? ''}
               options={carrying.map((p) => ({ value: p.id, label: `${p.name} · ${p.via}` }))}
-              onChange={(id) => setChosen(id as ProviderId)}
-              aria-label="Service"
+              onValueChange={(id: string) => setChosen(id as ProviderId)}
             />
-          </Field>
-        </div>
-        <div className="flex flex-wrap items-end gap-x-2 gap-y-3">
-          <Field label="Port" className="w-28">
-            <NodeInput
-              className={cn('w-full font-mono', problem && 'border-[var(--ansi-1)]')}
-              placeholder={type === 'tcp' ? 'Port (5432)' : 'Port (3000)'}
+          </div>
+          <div className="flex flex-wrap items-center gap-2">
+            <Input
+              size="sm"
+              variant="secondary"
+              containerClassName="w-32 flex-none"
+              className="font-mono"
+              error={!!problem}
+              placeholder={type === 'tcp' ? 'Port, 5432' : 'Port, 3000'}
               title={problem ?? 'The port to share: 3000, or host:3000 for another machine this server reaches'}
               value={port}
-              onChange={(e) => setPort(e.target.value.trim())}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPort(e.target.value.trim())}
               aria-label="Port"
             />
-          </Field>
-          <Field label="Name" className="min-w-24 flex-1">
-            <NodeInput className="w-full" placeholder="Optional" value={name} onChange={(e) => setName(e.target.value)} aria-label="Name" />
-          </Field>
-          {service?.stable && (
-            <Checkbox
-              className="h-7 gap-1.5 px-1 text-xs text-[var(--node-muted)] touch:h-9"
-              title="Keep the same address every time it connects"
-              label="Same address"
-              checked={stable}
-              onCheckedChange={setStable}
+            <Input
+              size="sm"
+              variant="secondary"
+              containerClassName="min-w-24 flex-1"
+              placeholder="Name (optional)"
+              value={name}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setName(e.target.value)}
+              aria-label="Name"
             />
-          )}
-          <NodeButton type="submit" variant="primary" disabled={!service || !portPart || !!problem || busy}>
-            <Plus />
-            Share
-          </NodeButton>
-        </div>
-      </form>
+            {service?.stable && (
+              <Checkbox
+                className="h-7 gap-1.5 px-1 text-[13px] text-[var(--node-muted)] touch:h-9"
+                title="Keep the same address every time it connects"
+                label="Same address"
+                checked={stable}
+                onCheckedChange={setStable}
+              />
+            )}
+            <Button type="submit" size="sm" loading={busy} disabled={!service || !portPart || !!problem || busy}>
+              <Plus className="size-3.5" />
+              Share
+            </Button>
+          </div>
+          {problem && <p className={cn('px-1 text-xs text-[var(--destructive-soft-foreground)]')}>{problem}</p>}
+        </form>
+      </div>
       {empty && service && (
-        <Empty
-          bordered={false}
-          className="min-h-0 flex-1 overflow-y-auto"
-          icon={<Globe />}
-          title="Share a port of this server on the internet"
-          description={
-            <span className="flex flex-col gap-1.5">
-              <span>{TYPES.find((t) => t.id === type)?.about} Anyone with the address reaches the port.</span>
-              <span>
-                <span className="text-[var(--node-fg)]">{service.name}</span> goes out through {service.via} and needs {service.needs}.
+        <div className="flex min-h-0 flex-1 flex-col overflow-y-auto">
+          <Empty
+            size="compact"
+            className="my-auto"
+            icon={<Globe />}
+            title="Share a port of this server on the internet"
+            description={
+              <span className="flex flex-col gap-1.5">
+                <span>{TYPES.find((t) => t.id === type)?.about} Anyone with the address reaches the port.</span>
+                <span>
+                  <span className="font-medium text-[var(--node-fg)]">{service.name}</span> goes out through {service.via} and needs {service.needs}.
+                </span>
+                {service.notes.map((note) => (
+                  <span key={note}>{note}</span>
+                ))}
               </span>
-              {service.notes.map((note) => (
-                <span key={note}>{note}</span>
-              ))}
-            </span>
-          }
-        />
+            }
+          />
+        </div>
       )}
     </>
-  );
-}
-
-/** A field with its name above it. A div, not a label: what's in it names
- * itself (aria-label), and a row of tabs isn't one control. */
-function Field({ label, className, children }: { label: string; className?: string; children: React.ReactNode }) {
-  return (
-    <div className={cn('flex min-w-0 flex-col gap-1.5', className)}>
-      <span className="text-2xs font-medium text-[var(--node-muted)]">{label}</span>
-      {children}
-    </div>
   );
 }
