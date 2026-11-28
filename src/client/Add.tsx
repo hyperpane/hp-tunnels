@@ -36,7 +36,7 @@ export function Add({ providers, onAdd, empty }: { providers: ProviderInfo[]; on
     <>
       <div className="flex-none p-3 pb-1">
         <form
-          className="rounded-card flex flex-col gap-2 bg-[var(--surface-raised)] p-2 shadow-[var(--highlight-top),var(--shadow-card)] ring-1 ring-[var(--hairline)] ring-inset"
+          className="rounded-card flex flex-col gap-2 bg-[var(--surface-raised)] p-2"
           onSubmit={(e) => {
             e.preventDefault();
             void submit();

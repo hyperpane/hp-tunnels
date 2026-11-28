@@ -79,9 +79,12 @@ export function TunnelsView() {
   return (
     <div className="flex h-full flex-col text-[13px] leading-5 text-[var(--node-fg)]" style={ACCENT}>
       <Add providers={reply.providers} onAdd={(req) => call({ op: 'add', ...req })} empty={reply.tunnels.length === 0} />
+      {/* The list on the add card's edges (12px in), its words and dots on
+          the card's controls' line (20px in). */}
       {reply.tunnels.length > 0 && (
-        <div className="flex min-h-0 flex-1 flex-col overflow-y-auto px-1.5 pt-2 pb-1.5">
+        <div className="flex min-h-0 flex-1 flex-col overflow-y-auto px-3 pt-2 pb-3">
           <SectionHeader
+            className="px-2"
             label="Tunnels"
             count={reply.tunnels.length}
             actions={live > 0 ? <span className="text-xs text-[var(--green-soft-foreground)] tabular-nums">{live} live</span> : undefined}
